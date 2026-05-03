@@ -1,7 +1,7 @@
 # "The Rack" - Simple Server Asset Tracker
 
 ## 1. Project Context & Subject Matter
-The context of this project is IT infrastructure management. I will be building a tool to track physical servers and their network information. To do this, I am starting by forking an existing Red Hat Cockpit starter project (https://github.com/gnaxc/Cockpit-Start/tree/main) because it provides a user interface shell that perfectly meets my needs at work. From that starting point, I will build out a custom back-end application to power a new plugin that meets all the requirements of the course syllabus.
+The context of this project is IT infrastructure management. I will be building a tool to track physical servers and their network information. To do this, I am starting by forking an existing Red Hat Cockpit starter project (https://github.com/cockpit-project/starter-kit) because it provides a user interface shell that perfectly meets my needs at work. From that starting point, I will build out a custom back-end application to power a new plugin that meets all the requirements of the course syllabus.
 
 ## 2. The Problem
 Currently, keeping track of new servers, their IP addresses, and their physical location in a server rack is often done using manual spreadsheets. These get outdated quickly and are prone to human error. "The Rack" solves this by creating a simple, web-based database to add, view, update, and delete server information in real-time.
