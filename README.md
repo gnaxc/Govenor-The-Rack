@@ -1,25 +1,27 @@
-# "The Rack" - Simple Server Asset Tracker
+# "The Rack" - Server Asset Tracker
 
 ## 1. Project Context & Subject Matter
-The context of this project is IT infrastructure management. I will be building a tool to track physical servers and their network information. To do this, I am starting by forking an existing Red Hat Cockpit starter project (https://github.com/cockpit-project/starter-kit) because it provides a user interface shell that perfectly meets my needs at work. From that starting point, I will build out a custom back-end application to power a new plugin that meets all the requirements of the course syllabus.
+In my day-to-day work managing server infrastructure and lab environments, keeping track of physical hardware is a constant challenge. For my final project, I am building a tool to manage this. I decided to start by forking an existing Red Hat Cockpit starter project (https://github.com/cockpit-project/starter-kit) to serve as my user interface shell. This gives me a practical frontend that I can actually use at work, while allowing me to focus my development time entirely on building a custom Node.js backend to power it (or basically a backend plugin).
 
 ## 2. The Problem
-Currently, keeping track of new servers, their IP addresses, and their physical location in a server rack is often done using manual spreadsheets. These get outdated quickly and are prone to human error. "The Rack" solves this by creating a simple, web-based database to add, view, update, and delete server information in real-time.
+Currently, whenever we rack a new server, deploy a new OS like AlmaLinux or RHEL, or assign a new static IP address, we track it using manual spreadsheets. This method is prone to human error and the sheets get outdated very quickly. "The Rack" solves this problem by providing a simple, web-based database to add, view, update, and delete server information in real-time, directly from a centralized dashboard.
 
 ## 3. Technical Components
-While the front-end will be a Cockpit plugin, the heavy lifting will be done by a custom back-end application. The technical pieces include:
-* **The Server:** A backend built with Node.js and the Express framework.
-* **The Database:** A MongoDB database to save the hardware information (like server name, IP address, and rack location).
-* **The Routes:** REST APIs that handle the data:
-    * `GET` - View a list of all servers.
-    * `POST` - Add a newly installed server.
-    * `PUT` - Update an existing server's information.
-    * `DELETE` - Remove a server that has been retired.
+While the frontend is a Cockpit plugin, the heavy lifting of this project is handled by the custom backend application I am building. The technical components include:
+
+* **The Server:** A backend server built using Node.js and the Express framework.
+* **The Database:** I am using a MongoDB database to store the hardware records (specifically tracking hostname, IP address, OS version, and rack position).
+* **The REST API:** The frontend UI and the database communicate through custom routes I am creating:
+    * `GET` - View a list of all current servers in the rack.
+    * `POST` - Add a newly installed server to the database.
+    * `PUT` - Update an existing server's information (like if an IP changes).
+    * `DELETE` - Remove a server record when the hardware is retired.
 
 ## 4. Meeting Project Requirements
-[cite_start]This project is a self-directed demonstration of proficiency in the course material[cite: 13]. It will meet the required learning objectives in the following ways:
-* [cite_start]**Create an application server using NodeJS and Express[cite: 8]:** I will build a standalone backend server to handle all the logic.
-* [cite_start]**Identify and create RESTful APIs[cite: 8]:** The frontend plugin will communicate with the backend exclusively through custom REST API routes.
-* [cite_start]**Structure a document database[cite: 8]:** MongoDB will be used to store the server data, replacing the need for local flat files or spreadsheets.
-* [cite_start]**Implement a basic authentication setup[cite: 8]:** I will add an authentication layer so only authorized users can add or delete server records from the database.
-* [cite_start]**Write thorough, quality unit tests[cite: 8]:** I will use Jest to write tests that ensure the API routes save and retrieve data correctly.
+This project is my self-directed demonstration of the core concepts we have covered in this course. Here is how I am meeting the specific grading requirements:
+
+* **Create an application server using NodeJS and Express:** I am building a standalone Node.js backend to handle all the data logic, separate from the frontend UI.
+* **Identify and create RESTful APIs:** The Cockpit plugin will communicate with my backend exclusively through the custom REST API routes listed above.
+* **Structure a document database:** I am utilizing MongoDB to store the server data, replacing the need for local flat files or spreadsheets.
+* **Implement a basic authentication setup:** I am adding an authentication layer to the backend so that only authorized administrators can add or delete server records.
+* **Write thorough, quality unit tests:** I am using Jest to write tests that verify my API routes save, retrieve, and handle data correctly.
