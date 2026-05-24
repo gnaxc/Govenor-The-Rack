@@ -24,4 +24,4 @@ This project is my self-directed demonstration of the core concepts we have cove
 * **Identify and create RESTful APIs:** The Cockpit plugin will communicate with my backend exclusively through the custom REST API routes listed above.  04/30/2026
 * **Structure a document database:** I am utilizing MongoDB to store the server data, replacing the need for local flat files or spreadsheets. 05/10/2026
 * **Implement a basic authentication setup:** I am adding an authentication layer to the backend so that only authorized administrators can add or delete server records.  05/15/2026
-* **Write thorough, quality unit tests:** I am using Jest to write tests that verify my API routes save, retrieve, and handle data correctly. 05/30/2026
+* **Write thorough, quality unit tests:** I am using Jest to write tests that verify my API routes save, retrieve, and handle data correctly. 05/30/26
