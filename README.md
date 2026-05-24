@@ -20,8 +20,8 @@ While the frontend is a Cockpit plugin, the heavy lifting of this project is han
 ## 4. Meeting Project Requirements
 This project is my self-directed demonstration of the core concepts we have covered in this course. Here is how I am meeting the specific grading requirements:
 
-* **Create an application server using NodeJS and Express:** I am building a standalone Node.js backend to handle all the data logic, separate from the frontend UI.
-* **Identify and create RESTful APIs:** The Cockpit plugin will communicate with my backend exclusively through the custom REST API routes listed above.
-* **Structure a document database:** I am utilizing MongoDB to store the server data, replacing the need for local flat files or spreadsheets.
-* **Implement a basic authentication setup:** I am adding an authentication layer to the backend so that only authorized administrators can add or delete server records.
-* **Write thorough, quality unit tests:** I am using Jest to write tests that verify my API routes save, retrieve, and handle data correctly.
+* **Create an application server using NodeJS and Express:** I am building a standalone Node.js backend to handle all the data logic, separate from the frontend UI.  04/15/2026
+* **Identify and create RESTful APIs:** The Cockpit plugin will communicate with my backend exclusively through the custom REST API routes listed above.  04/30/2026
+* **Structure a document database:** I am utilizing MongoDB to store the server data, replacing the need for local flat files or spreadsheets. 05/10/2026
+* **Implement a basic authentication setup:** I am adding an authentication layer to the backend so that only authorized administrators can add or delete server records.  05/15/2026
+* **Write thorough, quality unit tests:** I am using Jest to write tests that verify my API routes save, retrieve, and handle data correctly. 05/30/2026
