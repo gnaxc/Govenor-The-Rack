@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Rack - Asset Tracker</title>
+    <style>
+        /* PatternFly Dark Mode Aesthetic */
+        body { 
+            padding: 20px; 
+            font-family: 'RedHatText', 'Overpass', sans-serif; 
+            background-color: #151515; /* Native Cockpit dark background */
+            color: #e0e0e0; /* Off-white text */
+        }
+        
+        .header-container { margin-bottom: 25px; }
+        h1 { font-weight: 300; font-size: 24px; margin: 0; color: #ffffff; }
+        
+        /* CSS Grid to match the Cockpit Overview layout */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 20px;
+        }
+
+        /* Native Dark Card Styling */
+        .card { 
+            background-color: #212427; 
+            border: 1px solid #3c3f42; 
+            border-radius: 8px; 
+            padding: 20px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        h3 { 
+            margin-top: 0; 
+            font-size: 18px;
+            font-weight: 400;
+            border-bottom: 1px solid #3c3f42; 
+            padding-bottom: 15px; 
+            margin-bottom: 20px; 
+            color: #ffffff;
+        }
+        
+        /* Dark Mode Form Styling */
+        .form-group { margin-bottom: 15px; }
+        label { font-size: 14px; display: inline-block; margin-bottom: 5px; color: #d2d2d2; }
+        input { 
+            padding: 8px 12px; 
+            width: 90%; 
+            background-color: #151515; 
+            border: 1px solid #3c3f42; 
+            border-bottom: 1px solid #737679;
+            color: #ffffff;
+            border-radius: 3px; 
+            font-size: 14px;
+        }
+        input:focus { border-bottom: 2px solid #2b9af3; outline: none; }
+        
+        /* Primary Action Button */
+        button { 
+            padding: 8px 20px; 
+            background-color: #0066cc; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 3px; 
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        button:hover { background-color: #004080; }
+        button:disabled { background-color: #444548; color: #8a8d90; cursor: not-allowed; }
+        
+        /* Dark Mode Data Table */
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th, td { border-bottom: 1px solid #3c3f42; padding: 12px 8px; text-align: left; }
+        th { font-weight: 600; color: #d2d2d2; }
+        tr:hover { background-color: #2a2d32; }
+
+        /* Notification Banner */
+        #notificationBanner {
+            display: none;
+            padding: 15px;
+            color: white;
+            font-weight: bold;
+            border-radius: 3px;
+            margin-bottom: 20px;
+        }
+
+        /* Separator Line for Security Section (Moved from inline to avoid CSP blocking) */
+        hr {
+            border: 0;
+            border-top: 1px solid #3c3f42;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1>Governor Infrastructure: The Rack</h1>
+    </div>
+
+    <div id="notificationBanner"></div>
+    
+    <div class="grid-container">
+        
+        <div class="card">
+            <h3>Deploy New Asset</h3>
+            <form id="assetForm">
+                <div class="form-group"><label>Hostname</label><br><input type="text" id="hostname" placeholder="e.g., gDev-node-01" required></div>
+                <div class="form-group"><label>IP Address</label><br><input type="text" id="ipAddress" placeholder="e.g., 10.10.10.10" required></div>
+                <div class="form-group"><label>OS Version</label><br><input type="text" id="osVersion" placeholder="e.g., RHEL 10" required></div>
+                <div class="form-group"><label>Rack Position</label><br><input type="text" id="rackPosition" placeholder="e.g., U12" required></div>
+                
+                <hr>
+                
+                <div class="form-group">
+                    <label>Admin Password (Required to Save)</label><br>
+                    <input type="password" id="adminPassword" autocomplete="current-password" placeholder="Enter admin password" required>
+                </div>
+                
+                <button type="submit" id="saveBtn">Save Asset</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>System information (Monitored Assets)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hostname</th>
+                        <th>IP Address</th>
+                        <th>OS Version</th>
+                        <th>Rack</th>
+                    </tr>
+                </thead>
+                <tbody id="assetTableBody">
+                    </tbody>
+            </table>
+        </div>
+        
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

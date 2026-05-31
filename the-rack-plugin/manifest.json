@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "require": {
+    "cockpit": "300"
+  },
+  "tools": {
+    "the-rack": {
+      "label": "The Rack (Governor)",
+      "path": "index.html"
+    }
+  },
+  "content-security-policy": "default-src 'self' 'unsafe-inline'; connect-src *;"
+}
