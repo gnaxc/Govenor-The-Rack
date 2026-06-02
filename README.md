@@ -1,28 +1,31 @@
 # "The Rack" - Server Asset Tracker
 
-## 1. Project Context & Subject Matter
-In my day-to-day work managing server infrastructure and lab environments, keeping track of physical hardware is a constant challenge. For my final project, I am building a tool to manage this. I decided to start by forking an existing Red Hat Cockpit starter project (https://github.com/cockpit-project/starter-kit) to serve as my user interface shell. This gives me a practical frontend that I can actually use at work, while allowing me to focus my development time entirely on building a custom Node.js backend to power it (or basically a backend plugin).
-
-## 2. The Problem
-Currently, whenever we rack a new server, deploy a new OS like AlmaLinux or RHEL, or assign a new static IP address, we track it using manual spreadsheets. This method is prone to human error and the sheets get outdated very quickly. "The Rack" solves this problem by providing a simple, web-based database to add, view, update, and delete server information in real-time, directly from a centralized dashboard.
+## 1. Project Context
+In my day-to-day work managing server infrastructure and lab environments, keeping track of physical hardware is a constant challenge. For my final project, I built "The Rack"—a tool to manage this automatically. To make it a real-world tool I can actually use at work, I used an open-source Red Hat Cockpit starter project as my base shell. However, **the plugin's frontend user interface and the entire Node.js backend are completely my own custom code.** ## 2. The Problem
+Currently, whenever we rack a new server, deploy a new OS, or assign a new static IP address, or add new application packages we track it using manual spreadsheets. This method is prone to human error and gets outdated very quickly. "The Rack" solves this by providing a simple, web-based dashboard to view and manage server information. Even better, it replaces manual typing with automation, pulling live hardware data directly from the servers themselves.
 
 ## 3. Technical Components
-While the frontend is a Cockpit plugin, the heavy lifting of this project is handled by the custom backend application I am building. The technical components include:
+The heavy lifting of this project is handled by a custom backend API and an automation engine. The components include:
 
-* **The Server:** A backend server built using Node.js and the Express framework.
-* **The Database:** I am using a MongoDB database to store the hardware records (specifically tracking hostname, IP address, OS version, and rack position).
-* **The REST API:** The frontend UI and the database communicate through custom routes I am creating:
-    * `GET` - View a list of all current servers in the rack.
-    * `POST` - Add a newly installed server to the database.
-    * `PUT` - Update an existing server's information (like if an IP changes).
-    * `DELETE` - Remove a server record when the hardware is retired.
+* **The Frontend:** A custom Cockpit plugin built with HTML, JavaScript, and CSS (styled to match Red Hat's native look).
+* **The Backend:** A REST API server built using Node.js and the Express framework.
+* **The Database:** A MongoDB database used to store hardware records (hostnames, IP addresses, OS versions, App versions, etc.).
+* **The Automation Engine:** An Ansible integration that acts as an invisible worker. When I click "Sync", Ansible logs into remote servers, gathers live system facts (CPU cores, RAM, and specific software package versions), and injects that real-time data straight into my database.
 
-## 4. Meeting Project Requirements
-This project is my self-directed demonstration of the core concepts we have covered in this course. Here is how I am meeting the specific grading requirements:
+## 4. Project Requirements
+This project is my demonstration of the core concepts we have covered in this course. Here is exactly how I met the final grading requirements, along with where to find the code for each:
 
-* *COMPLETED*Create an application server using NodeJS and Express:** I am building a standalone Node.js backend to handle all the data logic, separate from the frontend UI.  04/15/2026
-* *COMPLETED*Identify and create RESTful APIs:** The Cockpit plugin will communicate with my backend exclusively through the custom REST API routes listed above.  04/30/2026
-* **Structure a document database:** I am utilizing MongoDB to store the server data, replacing the need for local flat files or spreadsheets. 05/10/2026
-* *COMPLETED*Implement a basic authentication setup:** I am adding an authentication layer to the backend so that only authorized administrators can add or delete server records.  05/15/2026
-* *COMPLETED & Passed*Write thorough, quality unit tests:** I am using Jest to write tests that verify my API routes save, retrieve, and handle data correctly. 05/30/26
-* **Update routes and add functionality:** Everything is working properly but may need more functionality based on requirements.  Updating with ansible connections (maybe). 05/31/26
+* **Express API with Authentication:** I built a custom Node.js/Express backend protected by `bcryptjs` password hashing and JWT (JSON Web Tokens). Only authorized admins can modify the database.
+  * *(File Reference: `governor-backend/server.js`)*
+* **2 Sets of CRUD Routes:** I created full Create, Read, Update, and Delete routes for two different data models: `Assets` (the servers) and `Datacenters` (the physical locations).
+  * *(File Reference: `governor-backend/server.js`)*
+* **Indexes for Performance & Uniqueness:** I configured my Mongoose schemas to require unique IP addresses and Datacenter names. I also built a Text Index on the `hostname` and `osVersion` fields.
+  * *(File Reference: `governor-backend/server.js`)*
+* **Text Search:** I implemented a custom API route (`/api/v1/assets/search`) that utilizes MongoDB's `$text` operator to search the database.
+  * *(File Reference: `governor-backend/server.js`)*
+* **External Data Providers:** I utilized Ansible's `setup` and `shell` modules to dynamically fetch live hardware telemetry and package data from external virtual machines, essentially using my own infrastructure as a live data provider.
+  * *(File Reference: `update_governor.yml` and `governor-backend/server.js`)*
+* **Thorough Unit Testing (>80%):** I wrote automated tests using Jest and Supertest to verify my API's happy paths, error handling, and security. (and with the help of some auto-test sites) My final project test coverage is passing at **87.25%**.
+  * *(File Reference: `governor-backend/server.test.js`)*
+* **Front-End Project:** I connected my database and backend API to a highly functional, custom-built UI that runs natively inside Red Hat Cockpit.
+  * *(File Reference: `the-rack-plugin/index.html` and `the-rack-plugin/app.js`)*

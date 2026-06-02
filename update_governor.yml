@@ -1,0 +1,52 @@
+---
+- name: Push Server Telemetry to Governor API
+  hosts: all
+  become: yes
+  become_method: sudo
+  gather_facts: false # Manually controlling facts prevents early SSH drops from crashing the script
+
+  tasks:
+    - name: Gather system facts
+      ansible.builtin.setup:
+      ignore_errors: true
+      ignore_unreachable: true
+
+    - name: Query vlc-plugin-notify exact version
+      ansible.builtin.shell: rpm -q --queryformat '%{VERSION}' vlc-plugin-notify 2>/dev/null || echo "Not Installed"
+      register: vlc_notify_raw
+      changed_when: false
+      ignore_errors: true
+      ignore_unreachable: true
+
+    - name: Query vlc-gui-qt exact version
+      ansible.builtin.shell: rpm -q --queryformat '%{VERSION}' vlc-gui-qt 2>/dev/null || echo "Not Installed"
+      register: vlc_qt_raw
+      changed_when: false
+      ignore_errors: true
+      ignore_unreachable: true
+
+    - name: Query vlc-gui-skins2 exact version
+      ansible.builtin.shell: rpm -q --queryformat '%{VERSION}' vlc-gui-skins2 2>/dev/null || echo "Not Installed"
+      register: vlc_skins_raw
+      changed_when: false
+      ignore_errors: true
+      ignore_unreachable: true
+
+    - name: Print Server Data as JSON
+      # This block is completely immune to missing data. If a server disconnects, 
+      # it seamlessly falls back to default strings instead of crashing the JSON script.
+      debug:
+        msg: >
+          {
+            "hostname": "{{ ansible_hostname | default(inventory_hostname) | trim }}",
+            "ipAddress": "{{ ansible_default_ipv4.address if (ansible_default_ipv4 is defined and ansible_default_ipv4.address is defined) else inventory_hostname }}",
+            "osVersion": "{{ ansible_distribution | default('Unknown') | trim }} {{ ansible_distribution_version | default('') | trim }}",
+            "hardwareModel": "{{ ansible_product_name | default('Virtual Machine') | trim }}",
+            "kernel": "{{ ansible_kernel | default('Unknown') | trim }}",
+            "coreCount": "{{ ansible_processor_vcpus | default('0') | trim }}",
+            "ramMB": "{{ ansible_memtotal_mb | default('0') | trim }}",
+            "datacenter": "Auto-Synced",
+            "vlcPluginNotify": "{{ vlc_notify_raw.stdout | trim if (vlc_notify_raw is defined and vlc_notify_raw.stdout is defined) else 'Not Installed' }}",
+            "vlcGuiQt": "{{ vlc_qt_raw.stdout | trim if (vlc_qt_raw is defined and vlc_qt_raw.stdout is defined) else 'Not Installed' }}",
+            "vlcGuiSkins2": "{{ vlc_skins_raw.stdout | trim if (vlc_skins_raw is defined and vlc_skins_raw.stdout is defined) else 'Not Installed' }}"
+          }
